@@ -8,7 +8,7 @@ TextCNN
 
 import os
 
-GPUID = 1
+GPUID = 0
 os.environ['CUDA_VISIBLE_DEVICES'] = str(GPUID)
 
 import tensorflow as tf
@@ -44,14 +44,14 @@ FLAGS = flags.FLAGS
 class Options(object):
     def __init__(self):
         self.fix_emb = False
-        self.reuse_w = False
+        self.reuse_w = True
         self.reuse_cnn = False
         self.reuse_discrimination = True  # reuse cnn for discrimination
         self.restore = True
         self.tanh = True  # activation fun for the top layer of cnn, otherwise relu
         self.model = 'cnn_deconv'  # 'cnn_rnn', 'rnn_rnn' , default: cnn_deconv
 
-        self.permutation = 50
+        self.permutation = 0
         self.substitution = 's'  # Deletion(d), Insertion(a), Substitution(s) and Permutation(p)
 
         self.W_emb = None
@@ -78,7 +78,7 @@ class Options(object):
 
         # batch norm & dropout
         self.batch_norm = False
-        self.cnn_layer_dropout = False
+        self.cnn_layer_dropout = True
         self.dropout = True
         self.dropout_ratio = 1.0
         self.is_train = True
@@ -211,7 +211,7 @@ def main():
         print('No embedding file found.')
         opt.fix_emb = False
 
-    with tf.device('/gpu:1'):
+    with tf.device('/gpu:0'):
         x_ = tf.placeholder(tf.int32, shape=[opt.batch_size, opt.sent_len])
         x_org_ = tf.placeholder(tf.int32, shape=[opt.batch_size, opt.sent_len])
         res_, loss_, train_op = auto_encoder(x_, x_org_, opt)
