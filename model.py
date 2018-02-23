@@ -195,11 +195,12 @@ def deconv_decoder(H_dec, x_org, W_norm, is_train, opt, res, prefix = '', is_reu
 
 
 def regularization(X, opt, is_train, prefix= '', is_reuse= None):
+    acf = tf.nn.tanh if opt.tanh else tf.nn.relu
     if '_X' not in prefix and '_H_dec' not in prefix:
         if opt.batch_norm:
             X = layers.batch_norm(X, decay=0.9, center=True, scale=True, is_training=is_train, scope=prefix+'_bn', reuse = is_reuse)
-        X = tf.nn.relu(X)
-    X = X if not opt.cnn_layer_dropout else layers.dropout(X, keep_prob = opt.dropout_ratio, scope=prefix + '_dropout')
+        X = acf(X)
+    X = X if (not opt.dropout or is_train is None) else layers.dropout(X, keep_prob = opt.dropout_ratio, scope=prefix + '_dropout')
 
     return X
 
