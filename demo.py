@@ -299,8 +299,8 @@ def main():
                     res = sess.run(res_, feed_dict={x_: x_batch, x_org_: x_batch_org})
                     print "Original     :" + " ".join([ixtoword[x] for x in sents[0] if x != 0])
                     print "Permutated   :" + " ".join([ixtoword[x] for x in sents_permutated[0] if x != 0])
-                    if opt.model == 'rnn_rnn' or opt.model == 'cnn_rnn':
-                        print "Reconstructed:" + " ".join([ixtoword[x] for x in res['rec_sents_feed_y'][0] if x != 0])
+                    #if opt.model == 'rnn_rnn' or opt.model == 'cnn_rnn':
+                    #    print "Reconstructed:" + " ".join([ixtoword[x] for x in res['rec_sents_feed_y'][0] if x != 0])
                     print "Reconstructed:" + " ".join([ixtoword[x] for x in res['rec_sents'][0] if x != 0])
 
 
